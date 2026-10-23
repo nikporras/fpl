@@ -1,0 +1,9 @@
+{
+  "name": "FPL",
+  "short_name": "FPL",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#14205c",
+  "theme_color": "#14205c",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
