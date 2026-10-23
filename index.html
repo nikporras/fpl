@@ -124,6 +124,7 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
   /* The right pane switches between the fixtures ledger and the league table. */
   main[data-pane="fixtures"] #league, main[data-pane="league"] #fixtures { display: none; }
   .panel-head .pane-switch { display: inline-flex; }
+  .lg-chips { flex-wrap: wrap; overflow: visible; }
   #fixtures .panel-head h2, #league .panel-head h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 @media (max-width: 1023px) {
@@ -276,14 +277,26 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 .chip.benched b { background: transparent; color: var(--faint); }
 .ledger .foot { padding: 14px 20px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); }
 
-/* ---------- League table ---------- */
-.lgsel { position: relative; min-width: 0; max-width: 60%; }
-.lgsel select { appearance: none; -webkit-appearance: none; width: 100%; background: transparent; border: 0; font: 500 13px/1.3 var(--font); color: var(--muted); padding: 6px 18px 6px 0; cursor: pointer; text-align: right; text-align-last: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lgsel select option { background: var(--surface); color: var(--text); }
-.lgsel::after { content: ""; position: absolute; right: 4px; top: 50%; width: 5px; height: 5px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
-.league table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 4px; }
+/* ---------- League tables ---------- */
+.lg-chips { display: flex; gap: 6px; padding: 12px 20px 4px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
+.lg-chips::-webkit-scrollbar { display: none; }
+.lg-chip { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--border); font: 500 13px/1 var(--font); color: var(--muted); max-width: 220px; transition: background-color .15s, color .15s; }
+.lg-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg-chip small { font-size: 11.5px; color: var(--muted); }
+.lg-chip:hover { background: var(--raised); }
+.lg-chip[aria-pressed="true"] { background: var(--text); color: var(--surface); border-color: var(--text); }
+.lg-chip[aria-pressed="true"] small { color: var(--surface); opacity: .7; }
+.lg-block { border-top: 1px solid var(--rule); margin-top: 8px; }
+.lg-head { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 20px 8px; text-align: left; }
+.lg-head b { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg-head span { color: var(--muted); font-size: 13px; flex: 1; white-space: nowrap; }
+.lg-head svg { flex: none; color: var(--faint); transition: transform .15s; }
+.lg-head[aria-expanded="false"] { padding-bottom: 14px; }
+.lg-head[aria-expanded="false"] svg { transform: rotate(-90deg); }
+.lg-loading { margin: 0; padding: 4px 20px 16px; font-size: 13px; color: var(--muted); }
+.league table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .league col.c-rank { width: 82px; } .league col.c-gw { width: 52px; } .league col.c-tot { width: 64px; }
-.league th { font: 500 12px/1 var(--font); color: var(--muted); text-align: left; padding: 12px 0 8px; }
+.league th { font: 500 12px/1 var(--font); color: var(--muted); text-align: left; padding: 6px 0 8px; }
 .league th.num, .league td.num { text-align: right; }
 .league th:first-child, .league td:first-child { padding-left: 20px; }
 .league th:last-child, .league td:last-child { padding-right: 20px; }
@@ -301,21 +314,15 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 .league tr.me td { background: var(--accent-soft); }
 .league tr.me td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .league tr.saved .who b::after { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 6px; vertical-align: middle; }
-.league .foot { padding: 14px 20px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.league .foot { padding: 12px 20px 16px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 @media (max-width: 479px) {
+  .lg-chips { padding-inline: 16px; }
+  .lg-head { padding-inline: 16px; }
+  .lg-loading { padding-inline: 16px; }
   .league th:first-child, .league td:first-child { padding-left: 16px; }
   .league th:last-child, .league td:last-child { padding-right: 16px; }
   .league col.c-rank { width: 70px; } .league col.c-gw { width: 44px; } .league col.c-tot { width: 56px; }
   .league .foot { padding-inline: 16px; }
-}
-@media (max-width: 479px) {
-  .ledger .day th { padding-inline: 16px; }
-  .ledger .when { padding-left: 16px !important; }
-  .ledger col.c-when { width: 54px; } .ledger col.c-score { width: 56px; }
-  .ledger td.away { padding-right: 16px; }
-  .ledger .picks td { padding-inline: 16px; }
-  .team { font-size: 14px; gap: 6px; }
-  .ledger .foot { padding-inline: 16px; }
 }
 .err { margin: 16px 20px; padding: 12px 14px; border-radius: 8px; background: #fdecea; color: #7a2016; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
 .err button { font-weight: 600; text-decoration: underline; }
@@ -374,7 +381,7 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
   <div class="tabs" role="tablist" aria-label="View">
     <button class="tab" role="tab" id="tab-team" aria-controls="team" aria-selected="true" data-view="team">Team</button>
     <button class="tab" role="tab" id="tab-fixtures" aria-controls="fixtures" aria-selected="false" data-view="fixtures">Fixtures <small id="fxCount"></small></button>
-    <button class="tab" role="tab" id="tab-league" aria-controls="league" aria-selected="false" data-view="league">League <small id="lgRank"></small></button>
+    <button class="tab" role="tab" id="tab-league" aria-controls="league" aria-selected="false" data-view="league">Leagues <small id="lgRank"></small></button>
   </div>
   <section class="panel" id="team" role="tabpanel" aria-labelledby="teamTitle"></section>
   <section class="panel ledger" id="fixtures" role="tabpanel" aria-labelledby="fxTitle"></section>
@@ -864,58 +871,74 @@ function renderError(err){
   $("#retry")?.addEventListener("click", () => go(viewGw, { fresh: true }));
 }
 
-// ---------- League table ----------
-// One standings page per league, kept for 60 s so a re-render never re-fetches by itself.
+// ---------- League tables ----------
+// Standings per league, kept for 60 s, and only fetched while the League pane is on screen.
 const lgCache = new Map();
-let lgLoading = null;
-function leagueKey(){ return "league:" + (season?.entry || ""); }
-function currentLeague(){
+const lgLoading = new Set();
+const lgCollapsed = new Set();
+function leagueKey(){ return "leagues:" + (season?.entry || ""); }
+function leagueVisible(){ return getComputedStyle($("#league")).display !== "none"; }
+// The leagues this device shows for this team: every mini-league by default, the big system ones off.
+function selectedLeagues(){
   const ls = season?.leagues || [];
-  const saved = +store.get(leagueKey());
-  return ls.find(l => l.id === saved) || ls[0] || null;
+  if(!ls.length) return [];
+  let ids = null; try { ids = JSON.parse(store.get(leagueKey()) || "null"); } catch {}
+  if(!Array.isArray(ids)){ ids = ls.filter(l => l.type === "x").map(l => l.id); if(!ids.length) ids = [ls[0].id]; }
+  return ls.filter(l => ids.includes(l.id));
 }
-async function loadLeague(id, { fresh = false } = {}){
-  const c = lgCache.get(id);
-  if(c && !fresh && Date.now() - c.at < 60000) return c.data;
-  const data = await getJSON(`leagues-classic/${id}/standings/`);
-  lgCache.set(id, { at: Date.now(), data });
-  return data;
+function toggleLeague(id){
+  const cur = selectedLeagues().map(l => l.id);
+  store.set(leagueKey(), JSON.stringify(cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id]));
+  renderLeague();
+}
+function ensureLeague(lg){
+  const c = lgCache.get(lg.id);
+  if((c && Date.now() - c.at < 60000) || lgLoading.has(lg.id) || !leagueVisible()) return;
+  lgLoading.add(lg.id);
+  getJSON(`leagues-classic/${lg.id}/standings/`)
+    .then(data => lgCache.set(lg.id, { at: Date.now(), data }))
+    .catch(err => { console.warn(err); lgCache.set(lg.id, { at: Date.now(), error: true }); })
+    .finally(() => { lgLoading.delete(lg.id); if(season?.leagues) renderLeague(); });
 }
 function paneSwitch(which){
   const n = view?.fixtures.filter(f => f.state === "live").length;
   return `<div class="pane-switch" role="tablist" aria-label="Right pane">
     <button type="button" role="tab" data-pane="fixtures" aria-selected="${which === "fixtures"}">Fixtures${n ? ` <small>${n} live</small>` : ""}</button>
-    <button type="button" role="tab" data-pane="league" aria-selected="${which === "league"}">League</button></div>`;
+    <button type="button" role="tab" data-pane="league" aria-selected="${which === "league"}">Leagues</button></div>`;
 }
+const chevron = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 function renderLeague(){
   const el = $("#league");
-  const lg = currentLeague();
-  if(season.snapshot || !lg){
+  const ls = season.leagues || [];
+  if(season.snapshot || !ls.length){
     $("#lgRank").textContent = "";
-    el.innerHTML = `<div class="panel-head"><h2 id="lgTitle">League</h2>${paneSwitch("league")}</div>
+    el.innerHTML = `<div class="panel-head"><h2 id="lgTitle">Leagues</h2>${paneSwitch("league")}</div>
       <div class="season-body"><p class="empty">${season.snapshot ? `<button type="button" data-open-add>Add your team</button> to see your mini-leagues here.` : "This manager is not in any classic league."}</p></div>`;
     return;
   }
-  $("#lgRank").textContent = lg.rank ? ordinal(lg.rank) : "";
-  const opts = season.leagues.map(l => `<option value="${l.id}" ${l.id === lg.id ? "selected" : ""}>${esc(l.name)}${l.rank ? ` · ${ordinal(l.rank)}` : ""}</option>`).join("");
-  const head = `<div class="panel-head"><h2 id="lgTitle">League</h2>${paneSwitch("league")}
-    <div class="lgsel"><label class="sr" for="lgSelect">League</label><select id="lgSelect">${opts}</select></div></div>`;
-  const c = lgCache.get(lg.id);
-  el.innerHTML = head + (c ? leagueTable(lg, c.data) : `<div class="season-body"><p class="empty" style="border:0">Loading ${esc(lg.name)}…</p></div>`);
-  if(!c || Date.now() - c.at >= 60000){
-    if(lgLoading === lg.id) return;
-    lgLoading = lg.id;
-    loadLeague(lg.id).then(() => { if(currentLeague()?.id === lg.id) renderLeague(); })
-      .catch(err => { console.warn(err); el.insertAdjacentHTML("beforeend", `<div class="err" role="alert"><span>Couldn't load the league table.</span><button type="button" data-retry-league>Retry</button></div>`); })
-      .finally(() => { lgLoading = null; });
-  }
+  const sel = selectedLeagues();
+  $("#lgRank").textContent = sel[0]?.rank ? ordinal(sel[0].rank) : "";
+  const chips = `<div class="lg-chips" role="group" aria-label="Leagues to show">${ls.map(l =>
+    `<button type="button" class="lg-chip" data-league="${l.id}" aria-pressed="${sel.some(x => x.id === l.id)}"><span>${esc(l.name)}</span>${l.rank ? `<small>${ordinal(l.rank)}</small>` : ""}</button>`).join("")}</div>`;
+  const blocks = sel.map(lg => {
+    const c = lgCache.get(lg.id), open = !lgCollapsed.has(lg.id);
+    const sub = lg.rank ? `${ordinal(lg.rank)} of ${fmtN(lg.count)}` : "";
+    const body = !open ? "" : c?.data ? leagueTable(lg, c.data)
+      : c?.error ? `<div class="err" role="alert"><span>Couldn't load ${esc(lg.name)}.</span><button type="button" data-retry-league="${lg.id}">Retry</button></div>`
+      : `<p class="lg-loading">Loading…</p>`;
+    return `<section class="lg-block" aria-label="${esc(lg.name)}">
+      <button type="button" class="lg-head" data-collapse="${lg.id}" aria-expanded="${open}"><b>${esc(lg.name)}</b><span>${sub}</span>${chevron}</button>${body}</section>`;
+  }).join("");
+  el.innerHTML = `<div class="panel-head"><h2 id="lgTitle">Leagues</h2>${paneSwitch("league")}<span class="aside">${sel.length} of ${ls.length} shown</span></div>
+    ${chips}${blocks || `<div class="season-body"><p class="empty">Tap a league above to show its table.</p></div>`}`;
+  sel.forEach(lg => { if(!lgCollapsed.has(lg.id)) ensureLeague(lg); });
 }
 function leagueTable(lg, data){
   const saved = new Set(teams.all().map(t => String(t.entry)));
   const me = String(season.entry);
   const rows = data.standings.results.map(r => {
     const e = String(r.entry), mine = e === me;
-    const mv = !r.last_rank ? ["new", "new"] : r.rank < r.last_rank ? ["up", "▲ " + (r.last_rank - r.rank)] : r.rank > r.last_rank ? ["down", "▼ " + (r.rank - r.last_rank)] : ["same", "–"];
+    const mv = !r.last_rank ? ["new", "new"] : r.rank < r.last_rank ? ["up", "\u25B2 " + (r.last_rank - r.rank)] : r.rank > r.last_rank ? ["down", "\u25BC " + (r.rank - r.last_rank)] : ["same", "\u2013"];
     return `<tr class="${mine ? "me" : saved.has(e) ? "saved" : ""}">
       <td><span class="rk">${fmtN(r.rank)}<span class="mv ${mv[0]}">${mv[1]}</span></span></td>
       <td class="who"><b title="${esc(r.entry_name)}">${esc(r.entry_name)}</b><small>${esc(r.player_name)}${mine ? "" : ` <button type="button" class="view" data-view-entry="${e}" data-view-name="${esc(r.entry_name)}" data-view-manager="${esc(r.player_name)}">View</button>`}</small></td>
@@ -924,7 +947,7 @@ function leagueTable(lg, data){
   }).join("");
   const inPage = data.standings.results.some(r => String(r.entry) === me);
   const upd = data.last_updated_data ? new Date(data.last_updated_data) : null;
-  const foot = `<div class="foot"><span>${data.standings.has_next ? `Top ${data.standings.results.length} of ${fmtN(lg.count)}` : `${data.standings.results.length} teams`}${!inPage && lg.rank ? ` · you are ${ordinal(lg.rank)}` : ""}</span>${upd ? `<span>Updated ${fmtTime(upd)}</span>` : ""}</div>`;
+  const foot = `<div class="foot"><span>${data.standings.has_next ? `Top ${data.standings.results.length} of ${fmtN(lg.count)}` : `${data.standings.results.length} teams`}${!inPage && lg.rank ? ` \u00B7 you are ${ordinal(lg.rank)}` : ""}</span>${upd ? `<span>Updated ${fmtTime(upd)}</span>` : ""}</div>`;
   return `<table><colgroup><col class="c-rank"><col><col class="c-gw"><col class="c-tot"></colgroup>
     <thead><tr><th>Rank</th><th>Team</th><th class="num">GW</th><th class="num">Total</th></tr></thead><tbody>${rows}</tbody></table>${foot}`;
 }
@@ -996,6 +1019,7 @@ function renderHeaderButtons(){
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
   document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
   document.querySelector("main").dataset.view = t.dataset.view;
+  if(t.dataset.view === "league" && season?.leagues) renderLeague(); // fetches only while on screen
 }));
 $("#prevGw").addEventListener("click", () => go(viewGw - 1));
 $("#nextGw").addEventListener("click", () => go(viewGw + 1));
@@ -1006,13 +1030,14 @@ $("#season").addEventListener("click", e => { const c = e.target.closest(".col")
 document.addEventListener("click", e => {
   const p = e.target.closest("[data-pane]");
   if(p){ document.querySelector("main").dataset.pane = p.dataset.pane; document.querySelectorAll("[data-pane]").forEach(b => b.setAttribute("aria-selected", b.dataset.pane === p.dataset.pane)); }
-  if(e.target.closest("[data-retry-league]")){ const lg = currentLeague(); if(lg){ lgCache.delete(lg.id); renderLeague(); } }
+  if(p && p.dataset.pane === "league" && season?.leagues) renderLeague(); // fetches only while on screen
+  const rt = e.target.closest("[data-retry-league]"); if(rt){ lgCache.delete(+rt.dataset.retryLeague); renderLeague(); }
+  const ch = e.target.closest("[data-league]"); if(ch) toggleLeague(+ch.dataset.league);
+  const co = e.target.closest("[data-collapse]"); if(co){ const id = +co.dataset.collapse; lgCollapsed.has(id) ? lgCollapsed.delete(id) : lgCollapsed.add(id); renderLeague(); }
   const vw = e.target.closest("[data-view-entry]");
   if(vw){ teams.add({ entry: vw.dataset.viewEntry, name: vw.dataset.viewName, manager: vw.dataset.viewManager }); store.set("lastLive", ""); viewGw = null; boot(); }
 });
-document.addEventListener("change", e => {
-  if(e.target.id === "lgSelect"){ store.set(leagueKey(), e.target.value); renderLeague(); }
-});
+
 const anySheetOpen = () => !!document.querySelector(".sheet:not([hidden])");
 const closeSheets = () => document.querySelectorAll(".sheet").forEach(s => s.hidden = true);
 document.addEventListener("keydown", e => {
@@ -1086,7 +1111,7 @@ $("#settingsForm").addEventListener("submit", async e => {
 boot();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 // Refresh every 60 s while a live gameweek is open
-setInterval(() => { if(season?.live && view?.status === "live" && !loading && !document.hidden){ const lg = currentLeague(); if(lg) lgCache.delete(lg.id); go(viewGw, { fresh: true }); } }, 60000);
+setInterval(() => { if(season?.live && view?.status === "live" && !loading && !document.hidden){ if(leagueVisible()) selectedLeagues().forEach(l => lgCache.delete(l.id)); go(viewGw, { fresh: true }); } }, 60000);
 // Keep the deadline countdown current
 setInterval(() => { if(view?.status === "upcoming" && $("#scoreNum")) $("#scoreNum").innerHTML = countdown(view); }, 30000);
 </script>
