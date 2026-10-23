@@ -1,4 +1,4 @@
-# El Dorado CO
+# FPL APP
 
 FPL companion PWA: live gameweek points, squad pitch, fixtures ledger and a season strip, with prev/next navigation through past gameweeks.
 
