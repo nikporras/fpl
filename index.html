@@ -381,6 +381,17 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
   <section class="panel league" id="league" role="tabpanel" aria-labelledby="lgTitle"></section>
 </main>
 
+<div class="sheet" id="welcomeSheet" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <h2 id="welcomeTitle">This is a sample team</h2>
+    <p>You are looking at <b>El Dorado CO</b>, a sample. Add your own FPL team to see your points, squad, fixtures and mini-leagues. You only need your manager ID, and it stays on this device.</p>
+    <div class="actions">
+      <button type="button" class="btn" data-close>Look around first</button>
+      <button type="button" class="btn gold" id="welcomeAdd">Add my team</button>
+    </div>
+  </div>
+</div>
+
 <div class="sheet" id="addSheet" hidden>
   <form class="card" id="addForm" role="dialog" aria-modal="true" aria-labelledby="addTitle">
     <h2 id="addTitle">Add your team</h2>
@@ -970,6 +981,8 @@ async function boot(){
   }
   season = snapshotSeason(); view = snapshotView(); viewGw = view.gw; updatedAt = null;
   render();
+  // First open with nothing saved: say what this is, once.
+  if(!teams.all().length && !store.get("welcomed")){ store.set("welcomed", "1"); closeSheets(); $("#welcomeSheet").hidden = false; $("#welcomeAdd").focus(); }
 }
 function renderHeaderButtons(){
   const has = teams.all().length > 0;
@@ -1017,6 +1030,7 @@ function openAdd(){
 }
 $("#addTeam").addEventListener("click", openAdd);
 $("#addFromTeams").addEventListener("click", openAdd);
+$("#welcomeAdd").addEventListener("click", openAdd);
 document.addEventListener("click", e => { if(e.target.closest("[data-open-add]")) openAdd(); });
 $("#addForm").addEventListener("submit", async e => {
   e.preventDefault();
