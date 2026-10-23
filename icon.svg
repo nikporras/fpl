@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="32" fill="#16181d"/><text x="64" y="82" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="52" letter-spacing="-2" fill="#ffffff">ED</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="28" fill="#2f6e4a"/>
+  <rect y="0" width="128" height="16" fill="#2a6443"/><rect y="32" width="128" height="16" fill="#2a6443"/><rect y="64" width="128" height="16" fill="#2a6443"/><rect y="96" width="128" height="16" fill="#2a6443"/>
+  <g fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="20" y="14" width="88" height="100" rx="2"/>
+    <line x1="20" y1="64" x2="108" y2="64"/>
+    <circle cx="64" cy="64" r="15"/>
+    <path d="M44 14v16h40V14M44 114V98h40v16"/>
+  </g>
+  <circle cx="64" cy="64" r="4" fill="#ffffff"/>
+</svg>
