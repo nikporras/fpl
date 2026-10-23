@@ -3,7 +3,7 @@
   "short_name": "FPL",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#14205c",
-  "theme_color": "#14205c",
+  "background_color": "#0e1016",
+  "theme_color": "#0e1016",
   "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
 }
