@@ -70,7 +70,11 @@ button:disabled { cursor: default; opacity: .35; }
 .bar { background: var(--surface); border-bottom: 1px solid var(--border); padding-top: env(safe-area-inset-top, 0px); position: sticky; top: 0; z-index: 10; }
 .bar-in { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "brand tools" "nav nav"; gap: 8px 12px; align-items: center; padding-block: 10px; }
 @media (min-width: 720px) { .bar-in { grid-template-columns: 1fr auto 1fr; grid-template-areas: "brand nav tools"; height: 60px; padding-block: 0; gap: 24px; } .tools { justify-self: end; } }
-.brand { grid-area: brand; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand { grid-area: brand; display: flex; align-items: center; gap: 10px; min-width: 0; text-align: left; border-radius: var(--radius); padding: 4px 8px 4px 4px; margin-left: -4px; justify-self: start; max-width: 100%; }
+.brand .chev { flex: none; width: 14px; height: 14px; color: var(--faint); display: none; }
+.brand.switch .chev { display: block; }
+.brand.switch:hover { background: var(--raised); }
+.brand:not(.switch) { cursor: default; }
 .brand svg { flex: none; width: 32px; height: 32px; }
 .brand h1 { margin: 0; font: 600 16px/1.2 var(--font); letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .brand p { margin: 0; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -89,11 +93,25 @@ button:disabled { cursor: default; opacity: .35; }
 .gwsel:has(select:disabled)::after { display: none; }
 
 .tools { grid-area: tools; display: flex; align-items: center; gap: 2px; }
-.stamp { font-size: 12px; color: var(--faint); margin-right: 8px; white-space: nowrap; }
+.stamp { font-size: 12px; color: var(--muted); margin-right: 8px; white-space: nowrap; }
 @media (max-width: 479px) { .stamp { display: none; } }
 .icon-btn { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); transition: background-color .15s, color .15s; }
 .icon-btn:hover { background: var(--raised); color: var(--text); }
 .icon-btn.spin svg { animation: spin .8s linear infinite; }
+.add-btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px 0 10px; margin-right: 4px; border-radius: 999px; background: var(--text); color: var(--surface); font: 600 14px/1 var(--font); white-space: nowrap; transition: background-color .15s; }
+.add-btn:hover { background: var(--muted); }
+.add-btn.quiet { background: var(--raised); color: var(--text); }
+.add-btn.quiet:hover { background: var(--raised-2); }
+@media (max-width: 479px) { .add-btn.quiet span { display: none; } .add-btn.quiet { width: 38px; padding: 0; justify-content: center; } }
+.team-list { display: grid; gap: 2px; margin-inline: -8px; }
+.team-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; text-align: left; min-height: 56px; }
+.team-row:hover { background: var(--raised); }
+.team-row[aria-current="true"] { background: var(--accent-soft); }
+.team-row b { display: block; font: 600 15px/1.25 var(--font); }
+.team-row small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.team-row .rm { font-size: 13px; color: var(--muted); padding: 8px; border-radius: 6px; }
+.team-row .rm:hover { color: var(--negative); background: var(--surface); }
+.card p b, .card p u { color: var(--text); font-weight: 600; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- Layout ---------- */
@@ -174,7 +192,7 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 @media (min-width: 720px) { .tabs { top: calc(68px + env(safe-area-inset-top, 0px)); } }
 .tab { flex: 1; height: 36px; border-radius: 999px; font: 600 14px/1 var(--font); color: var(--muted); display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: background-color .15s, color .15s; }
 .tab small { font: 500 12px/1 var(--font); color: var(--faint); }
-.tab[aria-selected="true"] { color: var(--text); background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.tab[aria-selected="true"] { color: var(--text); background: var(--surface); outline: 1px solid var(--border); outline-offset: -1px; }
 .tab[aria-selected="true"] small { color: var(--muted); }
 
 /* ---------- Pitch ---------- */
@@ -201,12 +219,12 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 .pl .sub { font-size: 11px; color: var(--muted); }
 .bench { margin-top: 12px; padding: 0 4px; display: grid; gap: 8px; }
 .bench h3 { margin: 0 0 0 8px; font: 600 13px/1 var(--font); color: var(--muted); display: flex; gap: 10px; }
-.bench h3 span { font-weight: 400; color: var(--faint); }
+.bench h3 span { font-weight: 400; color: var(--muted); }
 .bench .line { background: var(--raised); border-radius: 8px; padding: 12px 4px 10px; }
 .bench .pl .nm { background: var(--surface); color: var(--text); }
 .bench .pl .pt { color: var(--muted); }
 .bench .pl.pre .pt { color: var(--muted); }
-.bench .pl .ctx { color: var(--faint); }
+.bench .pl .ctx { color: var(--muted); }
 .bench .pl.boost .pt { color: var(--text); }
 .bench .arm.v { background: var(--text); color: var(--surface); }
 @media (max-width: 479px) {
@@ -288,10 +306,11 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 
 <header class="bar">
   <div class="wrap bar-in">
-    <div class="brand">
+    <button class="brand" id="teamsBtn" type="button" aria-haspopup="dialog" aria-label="Switch team">
       <svg width="40" height="40" viewBox="0 0 128 128" aria-hidden="true"><rect width="128" height="128" rx="32" fill="#16181d"/><text x="64" y="82" text-anchor="middle" font-family="Hanken Grotesk, Helvetica, Arial" font-weight="700" font-size="52" letter-spacing="-2" fill="#ffffff">ED</text></svg>
       <div><h1 id="teamName">El Dorado CO</h1><p id="manager">Nicolas Porras</p></div>
-    </div>
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
     <nav class="gwnav" aria-label="Gameweek">
       <button id="prevGw" aria-label="Previous gameweek"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div class="gwsel"><label class="sr" for="gwSelect">Gameweek</label><select id="gwSelect"></select></div>
@@ -299,6 +318,7 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
     </nav>
     <div class="tools">
       <span class="stamp" id="stamp"></span>
+      <button class="add-btn" id="addTeam" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add team</span></button>
       <button class="icon-btn" id="refresh" aria-label="Refresh" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg></button>
       <button class="icon-btn" id="openSettings" aria-label="Settings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     </div>
@@ -316,16 +336,39 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
   <section class="panel ledger" id="fixtures" role="tabpanel" aria-labelledby="fxTitle"></section>
 </main>
 
+<div class="sheet" id="addSheet" hidden>
+  <form class="card" id="addForm" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+    <h2 id="addTitle">Add your team</h2>
+    <p>Enter your FPL manager ID. On <b>fantasy.premierleague.com</b> open <b>Points</b>: the ID is the number in the address, like <b>fantasy.premierleague.com/entry/<u>1234567</u>/event/8</b>. It is saved on this device only.</p>
+    <div class="field"><label for="entry">Manager ID</label><input id="entry" placeholder="1234567" inputmode="numeric" autocomplete="off" required></div>
+    <p class="msg" id="addMsg" role="status"></p>
+    <div class="actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn gold">Add team</button>
+    </div>
+  </form>
+</div>
+
+<div class="sheet" id="teamsSheet" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="teamsTitle">
+    <h2 id="teamsTitle">Teams on this device</h2>
+    <div class="team-list" id="teamList"></div>
+    <div class="actions">
+      <button type="button" class="btn" id="openSettingsFromTeams">Settings</button>
+      <button type="button" class="btn gold" id="addFromTeams">Add another team</button>
+    </div>
+  </div>
+</div>
+
 <div class="sheet" id="sheet" hidden>
   <form class="card" id="settingsForm" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <h2 id="settingsTitle">Settings</h2>
-    <p>Add your Cloudflare Worker URL and FPL manager ID to switch from the snapshot to live data and browse past gameweeks. Both are saved on this device only.</p>
+    <p>The app reads the FPL API through a Cloudflare Worker. The built-in one works for everyone; only change it if you run your own.</p>
     <div class="field"><label for="proxy">Worker URL</label><input id="proxy" placeholder="https://fpl-proxy.yourname.workers.dev" inputmode="url" autocomplete="off" spellcheck="false"></div>
-    <div class="field"><label for="entry">Manager ID</label><input id="entry" placeholder="The number in your FPL points URL" inputmode="numeric" autocomplete="off"></div>
     <p class="msg" id="msg" role="status"></p>
     <div class="actions">
-      <button type="button" class="btn" id="useSnapshot">Use snapshot</button>
-      <button type="submit" class="btn gold">Go live</button>
+      <button type="button" class="btn" id="resetProxy">Use built-in</button>
+      <button type="submit" class="btn gold">Save</button>
     </div>
   </form>
 </div>
@@ -384,6 +427,19 @@ const CHIPS = { bboost:"Bench Boost", "3xc":"Triple Captain", freehit:"Free Hit"
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 const store = { get(k){ try { return localStorage.getItem(k) || "" } catch { return "" } }, set(k,v){ try { localStorage.setItem(k,v) } catch {} } };
+// The Worker everyone uses unless they set their own in Settings.
+const DEFAULT_PROXY = "https://fpl-proxy.porras456.workers.dev";
+// Teams saved on this device: [{ entry, name, manager }]. "entry" is the active one.
+const teams = {
+  all(){ try { return JSON.parse(store.get("teams") || "[]") } catch { return [] } },
+  save(list){ store.set("teams", JSON.stringify(list)); },
+  active(){ return store.get("entry"); },
+  add(t){ const list = this.all().filter(x => x.entry !== t.entry); list.push(t); this.save(list); store.set("entry", t.entry); },
+  remove(entry){ const list = this.all().filter(x => x.entry !== entry); this.save(list); if(this.active() === entry) store.set("entry", list[0]?.entry || ""); },
+  touch(entry, name, manager){ const list = this.all(); const t = list.find(x => x.entry === entry); if(t){ t.name = name; t.manager = manager; this.save(list); } }
+};
+// Older installs saved one entry without the list.
+if(store.get("entry") && !teams.all().length) teams.save([{ entry: store.get("entry"), name: "", manager: "" }]);
 const fmtN = n => n == null ? "—" : Number(n).toLocaleString("en-GB");
 const fmtDay = d => d.toLocaleDateString("en-GB", { weekday:"short", day:"numeric", month:"short" });
 const fmtTime = d => d.toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" });
@@ -397,7 +453,7 @@ let season = null, view = null, viewGw = null, loading = false, updatedAt = null
 const gwCache = new Map();
 
 // ---------- API through the Worker ----------
-function apiBase(){ return store.get("proxy").replace(/\/$/, ""); }
+function apiBase(){ return (store.get("proxy") || DEFAULT_PROXY).replace(/\/$/, ""); }
 async function getJSON(path, base = apiBase()){
   const r = await fetch(base + "/" + path, { cache: "no-store" });
   if(!r.ok) throw Object.assign(new Error(path + " returned " + r.status), { status: r.status });
@@ -540,7 +596,7 @@ function renderNav(){
 
 function statusOf(v){
   if(season.offline) return ["offline", "Offline, last saved"];
-  if(season.snapshot) return ["snapshot", "Snapshot · deadline " + v.deadline];
+  if(season.snapshot) return ["snapshot", "Sample team · deadline " + v.deadline];
   if(v.status === "upcoming") return ["upcoming", "Deadline " + v.deadline];
   if(v.status === "final") return ["final", "Final"];
   const liveNow = v.fixtures.some(f => f.state === "live");
@@ -619,7 +675,7 @@ function renderSeason(v){
   const el = $("#season");
   if(season.snapshot){
     el.innerHTML = `<div class="panel-head"><h2 id="seasonTitle">Season</h2></div>
-      <div class="season-body"><p class="empty">Points by gameweek appear here once you go live. <button type="button" data-open-settings>Add your Worker URL</button></p></div>`;
+      <div class="season-body"><p class="empty">This is a sample team. <button type="button" data-open-add>Add your team</button> to see your own points, squad and past gameweeks.</p></div>`;
     return;
   }
   const gws = [];
@@ -775,11 +831,13 @@ async function go(gw, opts = {}){
 }
 
 async function boot(){
-  const base = store.get("proxy"), entry = store.get("entry");
-  if(base && entry){
+  const base = apiBase(), entry = teams.active();
+  renderHeaderButtons();
+  if(entry){
     setBusy(true);
     try {
-      season = await loadSeason(base.replace(/\/$/, ""), entry);
+      season = await loadSeason(base, entry);
+      teams.touch(entry, season.teamName, season.manager);
       gwCache.clear();
       const linked = +(location.hash.match(/gw=(\d+)/) || [])[1];
       const want = viewGw || linked;
@@ -798,6 +856,13 @@ async function boot(){
   season = snapshotSeason(); view = snapshotView(); viewGw = view.gw; updatedAt = null;
   render();
 }
+function renderHeaderButtons(){
+  const has = teams.all().length > 0;
+  $("#teamsBtn").classList.toggle("switch", has);
+  $("#teamsBtn").disabled = !has;
+  $("#addTeam").classList.toggle("quiet", has);
+  $("#openSettings").hidden = has; // with teams saved, Settings lives in the team sheet
+}
 
 // ---------- UI wiring ----------
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
@@ -809,30 +874,73 @@ $("#nextGw").addEventListener("click", () => go(viewGw + 1));
 $("#gwSelect").addEventListener("change", e => go(+e.target.value));
 $("#refresh").addEventListener("click", () => go(viewGw, { fresh: true }));
 $("#season").addEventListener("click", e => { const c = e.target.closest(".col"); if(c) go(+c.dataset.gw); });
+const anySheetOpen = () => !!document.querySelector(".sheet:not([hidden])");
+const closeSheets = () => document.querySelectorAll(".sheet").forEach(s => s.hidden = true);
 document.addEventListener("keydown", e => {
-  if(e.target.closest("input, select, textarea") || !$("#sheet").hidden) return;
+  if(e.target.closest("input, select, textarea") || anySheetOpen()) return;
   if(e.key === "ArrowLeft") go(viewGw - 1);
   if(e.key === "ArrowRight") go(viewGw + 1);
 });
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeSheets(); });
+document.querySelectorAll(".sheet").forEach(s => s.addEventListener("click", e => { if(e.target === s || e.target.closest("[data-close]")) closeSheets(); }));
+
+// Add team
+function openAdd(){
+  closeSheets(); $("#entry").value = ""; $("#addMsg").textContent = "";
+  $("#addSheet").hidden = false; $("#entry").focus();
+}
+$("#addTeam").addEventListener("click", openAdd);
+$("#addFromTeams").addEventListener("click", openAdd);
+document.addEventListener("click", e => { if(e.target.closest("[data-open-add]")) openAdd(); });
+$("#addForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const entry = $("#entry").value.trim().replace(/\D/g, "");
+  if(!entry){ $("#addMsg").textContent = "Enter the number from your FPL points page."; return; }
+  $("#addMsg").textContent = "Looking up team…";
+  try {
+    const me = await getJSON(`entry/${entry}/`);
+    teams.add({ entry, name: me.name, manager: `${me.player_first_name} ${me.player_last_name}` });
+    closeSheets(); viewGw = null; boot();
+  } catch (err) {
+    $("#addMsg").textContent = err.status === 404 ? "No FPL team has that ID. Check the number in your points page address." : "Couldn't reach FPL right now. Check your connection and try again.";
+  }
+});
+
+// Switch or remove teams
+function openTeams(){
+  const active = teams.active();
+  $("#teamList").innerHTML = teams.all().map(t => `
+    <div class="team-row" aria-current="${t.entry === active}">
+      <button type="button" class="pick-team" data-entry="${t.entry}"><b>${esc(t.name || "Team " + t.entry)}</b><small>${esc(t.manager || "")}${t.manager ? " · " : ""}ID ${esc(t.entry)}</small></button>
+      <button type="button" class="rm" data-remove="${t.entry}" aria-label="Remove ${esc(t.name || t.entry)}">Remove</button>
+    </div>`).join("");
+  closeSheets(); $("#teamsSheet").hidden = false;
+}
+$("#teamsBtn").addEventListener("click", () => { if(teams.all().length) openTeams(); });
+$("#teamList").addEventListener("click", e => {
+  const pick = e.target.closest(".pick-team"), rm = e.target.closest("[data-remove]");
+  if(pick){ store.set("entry", pick.dataset.entry); closeSheets(); viewGw = null; store.set("lastLive", ""); boot(); }
+  if(rm){ teams.remove(rm.dataset.remove); store.set("lastLive", ""); if(teams.all().length) openTeams(); else { closeSheets(); viewGw = null; boot(); } }
+});
+
+// Settings: the Worker URL only
 function openSettings(){
-  $("#proxy").value = store.get("proxy"); $("#entry").value = store.get("entry"); $("#msg").textContent = "";
+  closeSheets(); $("#proxy").value = store.get("proxy") || DEFAULT_PROXY; $("#msg").textContent = "";
   $("#sheet").hidden = false; $("#proxy").focus();
 }
 $("#openSettings").addEventListener("click", openSettings);
-document.addEventListener("click", e => { if(e.target.closest("[data-open-settings]")) openSettings(); });
-$("#sheet").addEventListener("click", e => { if(e.target === $("#sheet")) $("#sheet").hidden = true; });
-document.addEventListener("keydown", e => { if(e.key === "Escape") $("#sheet").hidden = true; });
-$("#useSnapshot").addEventListener("click", () => { store.set("proxy",""); store.set("entry",""); store.set("lastLive",""); $("#sheet").hidden = true; viewGw = null; boot(); });
+$("#openSettingsFromTeams").addEventListener("click", openSettings);
+$("#resetProxy").addEventListener("click", () => { store.set("proxy", ""); closeSheets(); boot(); });
 $("#settingsForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const base = $("#proxy").value.trim().replace(/\/$/, ""), entry = $("#entry").value.trim();
-  if(!/^https?:\/\//.test(base) || !/^\d+$/.test(entry)){ $("#msg").textContent = "Enter a full Worker URL and a numeric manager ID."; return; }
-  $("#msg").textContent = "Connecting…";
+  const base = $("#proxy").value.trim().replace(/\/$/, "");
+  if(!/^https?:\/\//.test(base)){ $("#msg").textContent = "Enter a full URL starting with https://"; return; }
+  $("#msg").textContent = "Checking…";
   try {
-    await getJSON(`entry/${entry}/`, base);
-    store.set("proxy", base); store.set("entry", entry);
-    $("#sheet").hidden = true; viewGw = null; boot();
-  } catch (err) { $("#msg").textContent = "Could not reach the API through that Worker. Check the URL, the manager ID and that the Worker is deployed."; }
+    await getJSON("bootstrap-static/", base);
+    store.set("proxy", base === DEFAULT_PROXY ? "" : base);
+    closeSheets(); boot();
+  } catch (err) { $("#msg").textContent = "That Worker didn't answer. Check the URL and that it is deployed."; }
 });
 
 boot();
