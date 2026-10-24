@@ -199,8 +199,8 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 .empty button { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Tabs (phone and tablet) ---------- */
-.tabs { display: flex; gap: 4px; padding: 4px; background: var(--raised); border-radius: 999px; position: sticky; top: calc(96px + env(safe-area-inset-top, 0px)); z-index: 5; }
-@media (min-width: 720px) { .tabs { top: calc(68px + env(safe-area-inset-top, 0px)); } }
+.tabs { display: flex; gap: 4px; padding: 4px; background: var(--raised); border-radius: 999px; position: sticky; top: var(--hdr, calc(96px + env(safe-area-inset-top, 0px))); z-index: 5; }
+
 .tab { flex: 1; height: 36px; border-radius: 999px; font: 600 14px/1 var(--font); color: var(--muted); display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: background-color .15s, color .15s; }
 .tab small { font: 500 12px/1 var(--font); color: var(--faint); }
 .tab[aria-selected="true"] { color: var(--text); background: var(--surface); outline: 1px solid var(--border); outline-offset: -1px; }
@@ -327,6 +327,63 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
 .err { margin: 16px 20px; padding: 12px 14px; border-radius: 8px; background: #fdecea; color: #7a2016; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
 .err button { font-weight: 600; text-decoration: underline; }
 
+/* ---------- Team badges ---------- */
+.tb { display: inline-flex; align-items: center; flex: none; height: 17px; padding: 0 5px 0 8px; border-radius: 3px; font: 700 10px/1 var(--font); letter-spacing: .05em;
+  background: var(--raised); color: var(--text); box-shadow: inset 3px 0 0 var(--k, var(--faint)); font-variant-numeric: normal; }
+.pitch .tb { background: rgba(0,0,0,.32); color: #fff; }
+.bench .tb { background: var(--surface); color: var(--text); }
+.chip .tb { background: var(--surface); }
+
+/* ---------- Tappable players ---------- */
+button.pl { cursor: pointer; border-radius: 6px; padding: 2px 0; }
+button.pl:hover .nm { box-shadow: 0 0 0 2px var(--gold); }
+button.pl:focus-visible { outline-offset: 0; }
+.pl .opp { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; font-size: 11.5px; color: rgba(255,255,255,.9); white-space: nowrap; overflow: hidden; }
+.pl .opp span { overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 479px) { .pl .opp { flex-direction: column; gap: 2px; } }
+@media (max-width: 479px) { .ledger .fx .team .tb { display: none; } }
+.bench .pl .opp { color: var(--muted); }
+button.chip { cursor: pointer; }
+button.chip:hover { box-shadow: inset 0 0 0 1px var(--faint); }
+
+/* ---------- Match detail ---------- */
+.ledger tr.openable { cursor: pointer; }
+.ledger tr.openable:hover td, .ledger tr.open td { background: var(--raised); }
+.ledger tr.openable:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.ledger .when .tog { margin-left: 4px; vertical-align: -1px; color: var(--faint); transition: transform .15s; }
+.ledger tr.open .when .tog { transform: rotate(180deg); }
+.ledger tr.detail td { padding: 4px 20px 14px; background: var(--raised); }
+.mx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 7px 12px; align-items: start; font-size: 13px; }
+.mx-l { font-size: 11.5px; color: var(--muted); text-align: center; white-space: nowrap; padding-top: 1px; }
+.mx-h, .mx-a { display: flex; flex-wrap: wrap; gap: 2px 10px; min-width: 0; }
+.mx-h { justify-content: flex-end; text-align: right; }
+.mx span i { font-style: normal; color: var(--muted); font-weight: 600; }
+.mx span.me { font-weight: 700; color: var(--accent); }
+.mx-empty { margin: 0; font-size: 13px; color: var(--muted); text-align: center; }
+@media (max-width: 479px) { .ledger tr.detail td { padding-inline: 12px; } .mx { gap: 7px 8px; font-size: 12.5px; } }
+
+/* ---------- Points breakdown sheet ---------- */
+.pts-card { gap: 12px; max-height: 88vh; max-height: 88dvh; overflow-y: auto; }
+.pts-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.pts-head .shirt { width: 46px; height: 42px; }
+.pts-who h2 { margin: 0; font: 600 20px/1.2 var(--font); }
+.pts-who p { margin: 4px 0 0; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); min-width: 0; }
+.pts-who p span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pts-total { text-align: right; }
+.pts-total b { display: block; font: 600 34px/1 var(--font); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.pts-total span { font-size: 12px; color: var(--muted); }
+.pts-fx { display: flex; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 13px; font-weight: 600; }
+.pts-fx span:last-child { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.bd { width: 100%; border-collapse: collapse; font-size: 14px; }
+.bd td { padding: 7px 0; border-bottom: 1px solid var(--rule); }
+.bd .val { color: var(--muted); text-align: right; padding-right: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bd .p { width: 44px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bd .p.pos { color: var(--accent); }
+.bd .p.neg { color: var(--negative); }
+.bd-sum { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+.bd-sum b { font-variant-numeric: tabular-nums; }
+.pts-note { margin: 0; font-size: 13px; color: var(--muted); }
+
 /* ---------- Settings sheet ---------- */
 .sheet { position: fixed; inset: 0; background: rgba(20,22,28,.45); display: grid; align-items: end; z-index: 20; }
 .sheet[hidden] { display: none; }
@@ -387,6 +444,13 @@ main { display: grid; gap: 16px; padding-block: 16px calc(40px + env(safe-area-i
   <section class="panel ledger" id="fixtures" role="tabpanel" aria-labelledby="fxTitle"></section>
   <section class="panel league" id="league" role="tabpanel" aria-labelledby="lgTitle"></section>
 </main>
+
+<div class="sheet" id="pointsSheet" hidden>
+  <div class="card pts-card" role="dialog" aria-modal="true" aria-labelledby="ptsTitle">
+    <div id="ptsBody"></div>
+    <div class="actions"><button type="button" class="btn" data-close>Close</button></div>
+  </div>
+</div>
 
 <div class="sheet" id="welcomeSheet" hidden>
   <div class="card" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
@@ -566,6 +630,25 @@ async function loadGw(gw, { fresh = false } = {}){
   return v;
 }
 
+// Fixture events keyed by stat: { goals_scored: { h:[{element,value}], a:[...] }, ... }
+function statsOf(f){
+  const o = {};
+  (f.stats || []).forEach(st => o[st.identifier] = { h: st.h || [], a: st.a || [] });
+  return o;
+}
+const STAT = {
+  minutes: "Minutes played", goals_scored: "Goals", assists: "Assists", clean_sheets: "Clean sheet", goals_conceded: "Goals conceded",
+  own_goals: "Own goals", penalties_saved: "Penalties saved", penalties_missed: "Penalties missed", yellow_cards: "Yellow card",
+  red_cards: "Red card", saves: "Saves", bonus: "Bonus", defensive_contribution: "Defensive contribution", bps: "Bonus points system"
+};
+const statLabel = id => STAT[id] || String(id || "").replace(/_/g, " ").replace(/^./, c => c.toUpperCase());
+const POS = { 1: "Goalkeeper", 2: "Defender", 3: "Midfielder", 4: "Forward" };
+function badge(code){
+  if(!code) return "";
+  return `<span class="tb" style="--k:${kit(code)[0]}">${esc(code)}</span>`;
+}
+const elName = id => season?.el?.[id]?.name || "Player";
+
 function buildView(gw, ev, fixtures, live, picks, picksGw){
   const { code, el } = season;
   const liveById = {}; live.elements.forEach(e => liveById[e.id] = e);
@@ -573,7 +656,7 @@ function buildView(gw, ev, fixtures, live, picks, picksGw){
     const d = new Date(f.kickoff_time);
     const state = !f.started ? "pre" : (f.finished || f.finished_provisional) ? "ft" : "live";
     return { id: f.id, day: fmtDay(d), time: fmtTime(d), h: code[f.team_h], a: code[f.team_a],
-      hs: f.started ? f.team_h_score : null, as: f.started ? f.team_a_score : null, state, minute: f.minutes };
+      hs: f.started ? f.team_h_score : null, as: f.started ? f.team_a_score : null, state, minute: f.minutes, stats: statsOf(f) };
   });
   const out = { gw, deadline: fmtDay(new Date(ev.deadline)) + ", " + fmtTime(new Date(ev.deadline)), deadlineAt: ev.deadline, fixtures: fx, picks: [],
     status: ev.open ? "upcoming" : ev.finished ? "final" : "live", picksGw, noPicks: !picks,
@@ -585,13 +668,16 @@ function buildView(gw, ev, fixtures, live, picks, picksGw){
     const e = el[p.element] || { name: "#" + p.element, team: "", pos: p.element_type };
     const l = liveById[p.element];
     const myFx = fx.filter(f => f.h === e.team || f.a === e.team);
-    const perFx = {};
-    (l?.explain || []).forEach(x => perFx[x.fixture] = x.stats.reduce((s, st) => s + st.points, 0));
+    const perFx = {}, breakdown = {};
+    (l?.explain || []).forEach(x => {
+      perFx[x.fixture] = (x.stats || []).reduce((s, st) => s + (st.points || 0), 0);
+      breakdown[x.fixture] = (x.stats || []).map(st => ({ id: st.identifier, value: st.value, points: st.points || 0 }));
+    });
     const started = myFx.filter(f => f.state !== "pre"), done = myFx.filter(f => f.state === "ft");
     const state = !myFx.length ? "blank" : myFx.some(f => f.state === "live") ? "live" : done.length === myFx.length ? "ft" : started.length ? "part" : "pre";
     const mult = ev.open ? (p.position <= 11 ? (p.is_captain ? 2 : 1) : 0) : p.multiplier;
     return { id: p.element, name: e.name, team: e.team, pos: e.element_type ?? e.pos, slot: p.position, cap: p.is_captain, vice: p.is_vice_captain,
-      mult, raw: l ? l.stats.total_points : null, minutes: l ? l.stats.minutes : 0, perFx, fx: myFx.map(f => f.id), state,
+      mult, raw: l ? l.stats.total_points : null, minutes: l ? l.stats.minutes : 0, perFx, breakdown, fx: myFx.map(f => f.id), state,
       subIn: subsIn.has(p.element), subOut: subsOut.has(p.element) };
   });
   return out;
@@ -781,13 +867,15 @@ function player(p, v){
   else if(p.state === "live") ctx = (f.find(x => x.state === "live")?.minute ?? "") + "'";
   else if(p.state === "part") ctx = "1 of " + f.length + " played";
   else ctx = p.minutes > 0 ? p.minutes + " min" : "Didn't play";
-  const shown = p.state === "pre" || (v.status === "upcoming") ? fixtureLabel(p, v) : pts ?? 0;
-  return `<div class="pl ${cls} ${v.status === "upcoming" ? "pre" : ""} ${p.mult > 0 && p.slot > 11 ? "boost" : ""}">
+  const started = !(p.state === "pre" || p.state === "blank" || v.status === "upcoming");
+  const opp = fixtureLabel(p, v);
+  return `<button type="button" class="pl ${cls} ${v.status === "upcoming" ? "pre" : ""} ${p.mult > 0 && p.slot > 11 ? "boost" : ""}" data-pid="${p.id}" aria-label="${esc(p.name)}, ${esc(teamName(p.team))}${started ? `, ${pts ?? 0} points` : ""}. Show points breakdown">
     <div class="shirt">${shirtSvg(p.team, p.pos === 1)}${p.cap ? `<span class="arm">${p.mult === 3 ? "TC" : "C"}</span>` : p.vice ? '<span class="arm v">V</span>' : ""}</div>
     <div class="nm" title="${esc(p.name)}">${esc(p.name)}</div>
-    <div class="pt">${esc(shown)}</div>
-    <div class="ctx">${esc(ctx)}${p.subIn ? " · on" : p.subOut ? " · off" : ""}</div>
-  </div>`;
+    ${started ? `<div class="pt">${esc(pts ?? 0)}</div>` : ""}
+    <div class="opp">${badge(p.team)}<span>${opp === "No fixture" ? "No fixture" : "v " + esc(opp)}</span></div>
+    <div class="ctx">${esc(p.state === "blank" ? "" : ctx)}${p.subIn ? " · on" : p.subOut ? " · off" : ""}</div>
+  </button>`;
 }
 
 function pitchSvg(){
@@ -818,7 +906,7 @@ function renderTeam(v){
   el.innerHTML = `<div class="panel-head"><h2 id="teamTitle">Team</h2><span class="aside">${shape}${v.chip ? " · " + esc(CHIPS[v.chip] || v.chip) : ""}</span></div>
     <div class="pitch-wrap">
       <div class="pitch">${pitchSvg()}${lines.map(l => `<div class="line">${l.map(p => player(p, v)).join("")}</div>`).join("")}</div>
-      <div class="bench"><h3>Bench${v.status === "upcoming" ? "" : ` <span>${boost ? "counting, Bench Boost" : benchPts + " pts not counted"}</span>`}</h3>
+      <div class="bench"><h3>Bench${v.status === "upcoming" ? "" : ` <span>${boost ? "counting, Bench Boost" : benchPts + (benchPts === 1 ? " pt" : " pts") + " not counted"}</span>`}</h3>
         <div class="line">${bench.map(p => player(p, v)).join("")}</div></div>
     </div>`;
 }
@@ -838,11 +926,13 @@ function renderFixtures(v){
       const mine = v.picks.filter(p => p.fx.includes(f.id)).sort((a, b) => a.slot - b.slot);
       const when = f.state === "pre" ? f.time : f.state === "live" ? (f.minute ?? 0) + "'" : "FT";
       const sc = f.state === "pre" ? `<td class="sc pre">v</td>` : `<td class="sc">${f.hs}<span class="dash">–</span>${f.as}</td>`;
-      rows += `<tr class="fx ${mine.length ? "has-picks" : ""}">
-        <td class="when ${f.state}">${when}</td>
-        <td><div class="team h"><span>${esc(teamName(f.h))}</span>${stripe(f.h)}</div></td>
+      const canOpen = f.state !== "pre", open = canOpen && openFx.has(f.id);
+      rows += `<tr class="fx ${mine.length ? "has-picks" : ""} ${canOpen ? "openable" : ""} ${open ? "open" : ""}" ${canOpen ? `data-fx="${f.id}" tabindex="0" role="button" aria-expanded="${open}" aria-label="${esc(teamName(f.h))} ${f.hs} ${esc(teamName(f.a))} ${f.as}. Show match details"` : ""}>
+        <td class="when ${f.state}">${when}${canOpen ? '<svg class="tog" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>' : ""}</td>
+        <td><div class="team h"><span>${esc(teamName(f.h))}</span>${badge(f.h)}</div></td>
         ${sc}
-        <td class="away"><div class="team">${stripe(f.a)}<span>${esc(teamName(f.a))}</span></div></td></tr>`;
+        <td class="away"><div class="team">${badge(f.a)}<span>${esc(teamName(f.a))}</span></div></td></tr>`;
+      if(open) rows += `<tr class="detail"><td colspan="4">${matchDetail(f, v)}</td></tr>`;
       if(mine.length) rows += `<tr class="picks"><td colspan="4"><div class="chips">${mine.map(p => chip(p, f)).join("")}</div></td></tr>`;
     }
     rows += `</tbody>`;
@@ -854,6 +944,68 @@ function renderFixtures(v){
     <div class="foot">${v.picks.length ? `Your starters feature in ${mineCount} of ${v.fixtures.length} fixtures. Points shown per match, captain doubled.` : "No team saved for this week."}</div>`
     : `<div class="season-body"><p class="empty">No fixtures scheduled for gameweek ${v.gw}.</p></div>`}`;
 }
+const openFx = new Set();
+const EVENT_ORDER = ["goals_scored", "assists", "own_goals", "penalties_saved", "penalties_missed", "yellow_cards", "red_cards", "saves", "bonus"];
+const EVENT_LABEL = { goals_scored: "Goals", assists: "Assists", own_goals: "Own goals", penalties_saved: "Pens saved", penalties_missed: "Pens missed",
+  yellow_cards: "Yellow cards", red_cards: "Red cards", saves: "Saves", bonus: "Bonus" };
+function matchDetail(f, v){
+  const mine = new Set(v.picks.map(p => p.id));
+  const st = f.stats || {};
+  const showVal = id => id === "saves" || id === "bonus";
+  const list = (arr, id) => arr.slice().sort((a, b) => b.value - a.value).map(x =>
+    `<span class="${mine.has(x.element) ? "me" : ""}">${esc(elName(x.element))}${showVal(id) ? ` <i>${x.value}</i>` : x.value > 1 ? ` <i>×${x.value}</i>` : ""}</span>`).join("");
+  let rows = "";
+  for(const id of EVENT_ORDER){
+    let s = st[id], label = EVENT_LABEL[id];
+    // Before bonus is confirmed, show the provisional top three from the bonus points system.
+    if(id === "bonus" && (!s || !(s.h.length + s.a.length)) && st.bps){
+      const all = [...st.bps.h.map(x => ({ ...x, side: "h" })), ...st.bps.a.map(x => ({ ...x, side: "a" }))].sort((a, b) => b.value - a.value).slice(0, 3);
+      if(!all.length) continue;
+      s = { h: [], a: [] };
+      all.forEach((x, i) => s[x.side].push({ element: x.element, value: 3 - i }));
+      label = "Bonus (provisional)";
+    }
+    if(!s || !(s.h.length + s.a.length)) continue;
+    rows += `<div class="mx-h">${list(s.h, id)}</div><div class="mx-l">${label}</div><div class="mx-a">${list(s.a, id)}</div>`;
+  }
+  if(!rows) return `<p class="mx-empty">No events yet.</p>`;
+  return `<div class="mx">${rows}</div>`;
+}
+
+// ---------- Points breakdown ----------
+function openPoints(pid){
+  const p = view?.picks.find(x => String(x.id) === String(pid));
+  if(!p) return;
+  const fxs = view.fixtures.filter(f => p.fx.includes(f.id));
+  const raw = p.raw ?? 0, mult = p.mult;
+  const total = view.status === "upcoming" ? null : mult > 0 ? raw * mult : raw;
+  const role = [POS[p.pos], p.cap ? (mult === 3 ? "Triple captain" : "Captain") : p.vice ? "Vice-captain" : "", p.slot > 11 ? "Bench" : ""].filter(Boolean).join(" · ");
+  let body = `<div class="pts-head">
+      <div class="shirt">${shirtSvg(p.team, p.pos === 1)}</div>
+      <div class="pts-who"><h2 id="ptsTitle">${esc(p.name)}</h2><p>${badge(p.team)}<span>${esc(teamName(p.team))} · ${esc(role)}</span></p></div>
+      ${total != null ? `<div class="pts-total"><b>${total}</b><span>pts</span></div>` : ""}
+    </div>`;
+  if(!fxs.length) body += `<p class="pts-note">No fixture this gameweek.</p>`;
+  for(const f of fxs){
+    const home = f.h === p.team, opp = home ? f.a : f.h;
+    const score = f.state === "pre" ? `${f.day.split(" ")[0]} ${f.time}` : `${f.hs}–${f.as}${f.state === "live" ? ` · ${f.minute ?? 0}'` : " · FT"}`;
+    body += `<div class="pts-fx"><span>v ${esc(teamName(opp))} (${home ? "H" : "A"})</span><span>${esc(score)}</span></div>`;
+    const lines = (p.breakdown?.[f.id] || []).filter(x => x.points !== 0 || x.id === "minutes");
+    if(f.state === "pre"){ body += `<p class="pts-note">Hasn't played yet.</p>`; continue; }
+    if(!lines.length){ body += `<p class="pts-note">${p.minutes > 0 ? "No points from this match yet." : "Didn't play."}</p>`; continue; }
+    body += `<table class="bd"><thead class="sr"><tr><th>Stat</th><th>Value</th><th>Points</th></tr></thead><tbody>${lines.map(x => `<tr>
+      <td>${esc(statLabel(x.id))}</td><td class="val">${x.id === "minutes" ? x.value + " min" : esc(x.value)}</td>
+      <td class="p ${x.points > 0 ? "pos" : x.points < 0 ? "neg" : ""}">${x.points > 0 ? "+" + x.points : x.points < 0 ? "−" + Math.abs(x.points) : "0"}</td></tr>`).join("")}</tbody></table>`;
+  }
+  if(view.status !== "upcoming" && fxs.length){
+    body += `<div class="bd-sum"><span>Points</span><b>${raw}</b></div>`;
+    if(mult > 1) body += `<div class="bd-sum"><span>${mult === 3 ? "Triple captain" : "Captain"} ×${mult}</span><b>${raw * mult}</b></div>`;
+    if(mult === 0) body += `<p class="pts-note">On the bench, so these points don't count${p.subIn ? "" : " unless he's subbed on"}.</p>`;
+  }
+  $("#ptsBody").innerHTML = body;
+  closeSheets(); $("#pointsSheet").hidden = false; $("#pointsSheet .btn").focus();
+}
+
 function stripe(code){
   const [a, b] = kit(code);
   return `<i class="stripe" aria-hidden="true"><b style="background:${a}"></b><b style="background:${b}"></b></i>`;
@@ -862,7 +1014,7 @@ function chip(p, f){
   const raw = p.perFx[f.id];
   const pts = f.state === "pre" ? "–" : (raw ?? 0) * (p.mult || 1);
   const st = f.state === "pre" ? "pre" : f.state === "live" ? "live" : "";
-  return `<span class="chip ${st} ${p.mult === 0 ? "benched" : ""}"><i class="tm" style="background:${kit(p.team)[0]}"></i>${p.cap ? `<span class="arm">${p.mult === 3 ? "TC" : "C"}</span>` : p.vice ? '<span class="arm v">V</span>' : ""}${esc(p.name)}<b>${pts}</b></span>`;
+  return `<button type="button" class="chip ${st} ${p.mult === 0 ? "benched" : ""}" data-pid="${p.id}" aria-label="${esc(p.name)}, ${esc(teamName(p.team))}, ${pts} points. Show breakdown">${badge(p.team)}${p.cap ? `<span class="arm">${p.mult === 3 ? "TC" : "C"}</span>` : p.vice ? '<span class="arm v">V</span>' : ""}${esc(p.name)}<b>${pts}</b></button>`;
 }
 
 function renderError(err){
@@ -1021,6 +1173,16 @@ document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () =>
   document.querySelector("main").dataset.view = t.dataset.view;
   if(t.dataset.view === "league" && season?.leagues) renderLeague(); // fetches only while on screen
 }));
+document.addEventListener("click", e => {
+  const pl = e.target.closest("[data-pid]");
+  if(pl){ openPoints(pl.dataset.pid); return; }
+  const fx = e.target.closest("tr[data-fx]");
+  if(fx){ const id = +fx.dataset.fx; openFx.has(id) ? openFx.delete(id) : openFx.add(id); renderFixtures(view); }
+});
+document.addEventListener("keydown", e => {
+  const fx = e.target.closest?.("tr[data-fx]");
+  if(fx && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); fx.click(); setTimeout(() => document.querySelector(`tr[data-fx="${fx.dataset.fx}"]`)?.focus(), 0); }
+});
 $("#prevGw").addEventListener("click", () => go(viewGw - 1));
 $("#nextGw").addEventListener("click", () => go(viewGw + 1));
 $("#gwSelect").addEventListener("change", e => go(+e.target.value));
@@ -1108,6 +1270,9 @@ $("#settingsForm").addEventListener("submit", async e => {
   } catch (err) { $("#msg").textContent = "That Worker didn't answer. Check the URL and that it is deployed."; }
 });
 
+// Sticky tabs sit right under the header, whatever height it wraps to.
+const setHdr = () => document.documentElement.style.setProperty("--hdr", $(".topbar").offsetHeight + "px");
+setHdr(); new ResizeObserver(setHdr).observe($(".topbar"));
 boot();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 // Refresh every 60 s while a live gameweek is open
