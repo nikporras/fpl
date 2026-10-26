@@ -737,7 +737,8 @@ function renderNav(){
   for(let g = 1; g <= max; g++){
     const h = season.history[g];
     if(season.snapshot && g !== viewGw) continue;
-    opts += `<option value="${g}" ${g === viewGw ? "selected" : ""}>${h ? `GW ${g} · ${h.points} pts` : `Gameweek ${g}`}</option>`;
+    const pts = g === view?.gw && view.status === "live" ? figures(view).points : h?.points;
+    opts += `<option value="${g}" ${g === viewGw ? "selected" : ""}>${pts != null ? `GW ${g} · ${pts} pts` : `Gameweek ${g}`}</option>`;
   }
   sel.innerHTML = opts;
   sel.disabled = !!season.snapshot;
@@ -753,7 +754,9 @@ function statusOf(v){
   if(v.status === "upcoming") return ["upcoming", "Deadline " + v.deadline];
   if(v.status === "final") return ["final", "Final"];
   const liveNow = v.fixtures.some(f => f.state === "live");
-  return ["live", liveNow ? "Live" : "In progress"];
+  const allDone = v.fixtures.length && v.fixtures.every(f => f.state === "ft");
+  if(allDone) return ["final", "All matches played · bonus not final yet"];
+  return ["live", liveNow ? "Live" : "Between matches"];
 }
 
 function renderBoard(v, F){
@@ -771,7 +774,7 @@ function renderBoard(v, F){
       ["Overall rank", fmtN(season.history[season.currentId]?.overall)],
       ["Chip", chipName ? esc(chipName) : "None"],
     ] : [
-      ["Gameweek rank", fmtN(h?.rank)],
+      ["Gameweek rank", fmtN(h?.rank) + (v.status === "live" && h && h.points !== F.points ? `<small>as of ${h.points} pts</small>` : "")],
       ["Overall rank", fmtN(h?.overall) + (move ? `<small class="${move > 0 ? "good" : "bad"}">${move > 0 ? "▲" : "▼"} ${fmtN(Math.abs(move))}</small>` : "")],
       ["Average", v.avg ? fmtN(v.avg) : "—"],
       ["Highest", v.high ? fmtN(v.high) : "—"],
@@ -835,10 +838,13 @@ function renderSeason(v){
   for(let g = 1; g <= season.maxGw; g++) gws.push(g);
   const ev = id => season.events.find(e => e.id === id);
   // A live week has no history row yet: draw its running total.
-  const pointsFor = g => season.history[g]?.points ?? (g === v.gw && v.status === "live" ? figures(v).points : null);
+  const pointsFor = g => (g === v.gw && v.status === "live") ? figures(v).points : season.history[g]?.points ?? null;
   const vals = gws.map(g => pointsFor(g) ?? 0).concat(gws.map(g => ev(g)?.avg || 0));
   const top = Math.max(40, Math.ceil(Math.max(...vals) / 20) * 20);
-  const total = season.history[season.currentId]?.total;
+  const storedTotal = season.history[season.currentId]?.total;
+  // While the viewed week is open, swap FPL's lagging stored figure for the live sum.
+  const lag = v.status === "live" && v.gw === season.currentId && season.history[v.gw] ? figures(v).points - season.history[v.gw].points : 0;
+  const total = storedTotal != null ? storedTotal + lag : null;
   el.innerHTML = `<div class="panel-head"><h2 id="seasonTitle">Season${total != null ? ` · ${fmtN(total)} pts` : ""}</h2>
       <div class="legend"><span><i></i>Your points</span><span><i class="avg"></i>Average</span></div></div>
     <div class="season-body"><div class="strip" role="list">${gws.map(g => {
